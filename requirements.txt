@@ -1,6 +1,9 @@
-# Dev environment
-pip
-autopep8
-
-# App
-flask
+Flask
+werkzeug
+python-dotenv
+google-generativeai
+pydicom
+numpy
+Pillow
+PyMuPDF
+Markdown

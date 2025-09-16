@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <h1>Analysis Results</h1>
+
+        <div class="analysis-container">
+            {{ analysis|safe }}
+        </div>
+
+        <h2>Continue the Conversation</h2>
+        <div id="chat-container" class="chat-container">
+            <!-- Chat messages will be dynamically inserted here -->
+        </div>
+
+        <form id="chat-form">
+            <input type="text" id="chat-input" placeholder="Ask a follow-up question..." autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+
+        <div class="page-links">
+            <a href="/">Start New Analysis</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatContainer = document.getElementById('chat-container');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+
+            // Function to add a message to the chat container
+            function addMessage(role, content) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chat-message', role === 'user' ? 'user-message' : 'model-message');
+                messageDiv.innerHTML = content; // Using innerHTML to render the Markdown
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll to the bottom
+            }
+
+            // Handle form submission
+            chatForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const userMessage = chatInput.value.trim();
+                if (!userMessage) return;
+
+                addMessage('user', userMessage);
+                chatInput.value = '';
+
+                try {
+                    const response = await fetch('{{ url_for("main.chat") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: userMessage }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    addMessage('model', data.response);
+
+                } catch (error) {
+                    console.error('Error during chat:', error);
+                    addMessage('model', 'Sorry, an error occurred. Please try again.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinical Analysis AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <h1>Clinical Analysis AI</h1>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="post" action="{{ url_for('main.upload_file') }}" enctype="multipart/form-data">
+            <h2>Analyze Medical Document or Image</h2>
+            <p>Upload a file (txt, pdf, png, jpg, jpeg, gif, dcm) for analysis.</p>
+            <input type="file" name="file">
+            <input type="submit" value="Upload and Analyze">
+        </form>
+
+        <div class="page-links">
+            <p>Or, use a specialized tool:</p>
+            <a href="{{ url_for('main.lab_data') }}">Analyze Lab Data</a> |
+            <a href="{{ url_for('main.ocr_data') }}">Analyze OCR Output</a>
+        </div>
+    </div>
+</body>
+</html>

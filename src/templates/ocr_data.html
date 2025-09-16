@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analyze OCR Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <h1>Analyze Text Recognition (OCR) Data</h1>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="post" action="{{ url_for('main.analyze_ocr_data') }}">
+            <textarea name="ocr_data" rows="15" placeholder="Paste the structured OCR data here..."></textarea>
+            <br><br>
+            <input type="submit" value="Analyze OCR Data">
+        </form>
+
+        <div class="page-links">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

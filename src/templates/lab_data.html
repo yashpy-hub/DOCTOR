@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analyze Lab Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <h1>Analyze Lab Data</h1>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="post" action="{{ url_for('main.analyze_lab_data') }}" enctype="multipart/form-data">
+            <h2>Upload CSV File</h2>
+            <input type="file" name="csv_file">
+
+            <h2>Or Enter Manually</h2>
+            <textarea name="manual_data" rows="10" placeholder="Enter lab data here, e.g.,\nTest,Value,Unit\nWBC,8.5,10^9/L\nRBC,4.7,10^12/L"></textarea>
+
+            <input type="submit" value="Analyze Lab Data">
+        </form>
+
+        <div class="page-links">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
